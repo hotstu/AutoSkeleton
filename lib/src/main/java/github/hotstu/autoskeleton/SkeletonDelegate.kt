@@ -21,7 +21,7 @@ open class SkeletonDelegate(private val viewGroup: ViewGroup, val drawDepth: Int
     private val viewBoundsRect = Rect()
     private val viewBorderPaint = Paint().apply {
         style = Paint.Style.FILL
-        shader = LinearGradient(0f, 0f, 100f,100f, Color.WHITE, Color.BLACK, Shader.TileMode.REPEAT)
+        shader = LinearGradient(0f, 0f, 500f,500f, Color.WHITE, Color.BLACK, Shader.TileMode.REPEAT)
     }
 
     private val layeredViewQueue = ArrayDeque<LayeredViewHolder>()
@@ -52,7 +52,6 @@ open class SkeletonDelegate(private val viewGroup: ViewGroup, val drawDepth: Int
             getLocationInWindow(location)
             val x = location[0].toFloat()
             val y = location[1].toFloat()
-            val saveCount = canvas.save()
             if (!layeredViewQueue.isEmpty()) {
                 throw AssertionError("View queue is not empty.")
             }
@@ -81,12 +80,10 @@ open class SkeletonDelegate(private val viewGroup: ViewGroup, val drawDepth: Int
 
                 view?.run {
                     if (shouldDraw(this)) {
-                        val viewSaveCount = canvas.save()
                         getLocationInWindow(location)
-                        canvas.translate(location[0] - x, location[1] - y)
                         viewBoundsRect.set(0, 0, width, height)
+                        viewBoundsRect.offset(location[0] - x.toInt(), location[1] - y.toInt())
                         canvas.drawRect(viewBoundsRect, viewBorderPaint)
-                        canvas.restoreToCount(viewSaveCount)
                     }
 
                     //queue children for later drawing.
@@ -104,7 +101,6 @@ open class SkeletonDelegate(private val viewGroup: ViewGroup, val drawDepth: Int
                 }
 
             }
-            canvas.restoreToCount(saveCount)
         }
         return enabled
 
