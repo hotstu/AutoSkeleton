@@ -1,17 +1,37 @@
 AutoSkeleton
 ===============
+Yet Another skeleton loading library provides an easy way to show skeleton loading like Facebook or Alipay with many Advantages compare to other libraries
 
-可预览 (在layout editor中可以直接看到效果)
-可拓展 （快速在任意类型的ViewGroup中实现本效果，适应各种场景）
-kotlin 
-代码简洁易懂
-侵入性小
-高性能 (使用shader绘制，没有不像（shammerlayout）操作bitmap， 没有view tree draw 过程)
-支持自定义纹理
-支持控制绘制的层级
-支持控制哪些view被绘制
-支持动画
-支持全局动画使用同一个顺序(更加整齐)
+### Advantages
+* preview in android studio 
 
+  you can see the result  seen in layout editor directly in android studio
+
+* extensibility
+
+  you can simply extend any ViewGroup to implement the skeleton loading ability such as the core 
+
+* kotlin 
+
+  written in pure kotlin except some java code to show interpro ability with java
+
+* simple & clean code
+
+* better performance
+使用shader绘制，不像[shimmerlayout](https://github.com/team-supercharge/ShimmerLayout)操作bitmap， 同时省去了遍历view tree 的draw过程)
+
+* custom drawing
+
+
+* control the traversal depth
+* Exclude some views
+* custom animation
+* more natural transition
+其他[替换view，替换reyclerView adapter的方案](https://github.com/ethanhua/Skeleton), 会出现画面抖动，或者出现与骨骼与真实view不一致的情况, 这里的过渡如丝般顺滑
+
+
+### similar Libraries
+[shimmerlayout](https://github.com/team-supercharge/ShimmerLayout)
+[Skeleton](https://github.com/ethanhua/Skeleton)
 TODO
 自定义动画效果
