@@ -38,6 +38,11 @@ class SkeletonFrameLayout : FrameLayout {
         }
     }
 
+    override fun onDetachedFromWindow() {
+        delegate.stopAnimate()
+        super.onDetachedFromWindow()
+    }
+
     override fun onDraw(canvas: Canvas) {
         if (!delegate.onDraw(canvas)) {
             super.onDraw(canvas)
