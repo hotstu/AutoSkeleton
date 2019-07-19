@@ -6,6 +6,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnticipateInterpolator
+import androidx.annotation.ColorInt
 import androidx.core.util.Pools
 import androidx.core.view.children
 import androidx.core.view.doOnPreDraw
@@ -20,7 +21,6 @@ import java.util.*
  */
 open class SkeletonDelegate(val viewGroup: ViewGroup, val drawDepth: Int = 1) {
     companion object {
-        const val DEFAULT_SHIMMER_ANGLE = 30
         const val DEFAULT_SHIMMER_DURATION = 2_500L
     }
 
@@ -29,6 +29,8 @@ open class SkeletonDelegate(val viewGroup: ViewGroup, val drawDepth: Int = 1) {
     val layeredViewQueue = ArrayDeque<LayeredViewHolder>()
     val viewBorderPaint = Paint().apply {
         style = Paint.Style.FILL
+        isDither = true
+        isAntiAlias = true
     }
 
     val animator: ValueAnimator by lazy {
@@ -45,26 +47,41 @@ open class SkeletonDelegate(val viewGroup: ViewGroup, val drawDepth: Int = 1) {
             LayeredViewHolder()
         }
     }
-    val PaintMatrix = Matrix()
+    val paintMatrix = Matrix()
     var enabled = false
     var animationFraction = 0f
+    private var mEdgeColor = Color.WHITE
+    private var mShimmerColor = Color.GRAY
+
+    fun setEdgeColor(@ColorInt color: Int) {
+        mEdgeColor = color
+    }
+
+    fun setShimmerColor(@ColorInt color: Int) {
+        mShimmerColor = color
+    }
 
     fun setEnable(v: Boolean) {
         enabled = v
         viewGroup.setWillNotDraw(!enabled)
         viewGroup.postInvalidate()
+
+    }
+
+
+    fun startAnimate() {
         if (enabled) {
             viewGroup.doOnPreDraw {
-
                 animator.addUpdateListener {
                     animationFraction = it.animatedFraction
                     viewGroup.postInvalidate()
                 }
                 animator.start()
             }
+            viewGroup.postInvalidate()
         }
-
     }
+
 
     fun stopAnimate() {
         animator.end()
@@ -80,20 +97,21 @@ open class SkeletonDelegate(val viewGroup: ViewGroup, val drawDepth: Int = 1) {
 
     open fun updateShader() {
         val layoutWidth = viewGroup.width.toFloat()
-        val fl = (animationFraction  - .5f)  * layoutWidth
-        PaintMatrix.setTranslate(fl, 0f)
+        val fl = (animationFraction - .5f) * layoutWidth * 1.5f
+        paintMatrix.reset()
+        paintMatrix.postTranslate(fl, 0f)
         viewBorderPaint.shader = LinearGradient(
             0f, 0f,
             layoutWidth, 0f,
             intArrayOf(
-                Color.WHITE, Color.BLACK, Color.BLACK, Color.WHITE
+                mEdgeColor, mShimmerColor, mEdgeColor
             ),
             floatArrayOf(
-                .45f, .49f, .51f, .55f
+                .25f, .5f, .65f
             ),
             Shader.TileMode.CLAMP
         ).apply {
-            setLocalMatrix(PaintMatrix)
+            setLocalMatrix(paintMatrix)
         }
     }
 

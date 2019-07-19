@@ -6,6 +6,7 @@ import android.graphics.Canvas
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.widget.FrameLayout
+import androidx.core.content.ContextCompat
 
 /**
  * @author hglf [hglf](https://github.com/hotstu)
@@ -20,6 +21,8 @@ class SkeletonFrameLayout : FrameLayout {
     private val delegate = SkeletonDelegate(this, 2)
 
     init {
+        delegate.setEdgeColor(ContextCompat.getColor(context, R.color.autoskeleton_light_transparent))
+        delegate.setShimmerColor(ContextCompat.getColor(context, R.color.autoskeleton_dark_transparent))
         delegate.setEnable(true)
     }
 
@@ -36,6 +39,11 @@ class SkeletonFrameLayout : FrameLayout {
         if (!delegate.dispatchDraw(canvas)) {
             super.dispatchDraw(canvas)
         }
+    }
+
+    override fun onAttachedToWindow() {
+        super.onAttachedToWindow()
+        delegate.startAnimate()
     }
 
     override fun onDetachedFromWindow() {
