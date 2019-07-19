@@ -1,10 +1,8 @@
 package github.hotstu.autoskeleton
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
 import android.util.AttributeSet
-import android.view.MotionEvent
 import android.widget.FrameLayout
 import androidx.core.content.ContextCompat
 
@@ -13,7 +11,7 @@ import androidx.core.content.ContextCompat
  * @since 7/18/19
  * @desc
  */
-class SkeletonFrameLayout : FrameLayout {
+class SkeletonFrameLayout : FrameLayout, AnimatedSkeleton<FrameLayout> {
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
@@ -23,20 +21,22 @@ class SkeletonFrameLayout : FrameLayout {
     init {
         delegate.setEdgeColor(ContextCompat.getColor(context, R.color.autoskeleton_light_transparent))
         delegate.setShimmerColor(ContextCompat.getColor(context, R.color.autoskeleton_dark_transparent))
-        delegate.setEnable(true)
+        delegate.enabled = true
     }
 
-    override fun onInterceptTouchEvent(ev: MotionEvent): Boolean {
-        return delegate.onInterceptTouchEvent(ev) || super.onInterceptTouchEvent(ev)
+    override fun hideSkeleton() {
+        delegate.stopAnimate()
+        delegate.enabled = false
     }
 
-    @SuppressLint("ClickableViewAccessibility")
-    override fun onTouchEvent(event: MotionEvent): Boolean {
-        return delegate.onTouchEvent(event) || super.onTouchEvent(event)
+    override fun showSkeleton() {
+        delegate.enabled = true
+        delegate.startAnimate()
     }
+
 
     override fun dispatchDraw(canvas: Canvas) {
-        if (!delegate.dispatchDraw(canvas)) {
+        if (!delegate.enabled) {
             super.dispatchDraw(canvas)
         }
     }
@@ -52,8 +52,10 @@ class SkeletonFrameLayout : FrameLayout {
     }
 
     override fun onDraw(canvas: Canvas) {
-        if (!delegate.onDraw(canvas)) {
+        if (!delegate.enabled) {
             super.onDraw(canvas)
+        } else {
+            delegate.onDraw(canvas)
         }
     }
 }

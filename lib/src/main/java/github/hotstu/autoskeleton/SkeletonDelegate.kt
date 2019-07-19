@@ -2,7 +2,6 @@ package github.hotstu.autoskeleton
 
 import android.animation.ValueAnimator
 import android.graphics.*
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnticipateInterpolator
@@ -35,11 +34,11 @@ open class SkeletonDelegate(val viewGroup: ViewGroup, val drawDepth: Int = 1) {
 
     val animator: ValueAnimator by lazy {
         ValueAnimator.ofFloat(0f, 1f)
-            .apply {
-                repeatCount = ValueAnimator.INFINITE
-                duration = DEFAULT_SHIMMER_DURATION
-                interpolator = AnticipateInterpolator()
-            }
+                .apply {
+                    repeatCount = ValueAnimator.INFINITE
+                    duration = DEFAULT_SHIMMER_DURATION
+                    interpolator = AnticipateInterpolator()
+                }
     }
 
     val layeredViewPool by lazy {
@@ -49,6 +48,11 @@ open class SkeletonDelegate(val viewGroup: ViewGroup, val drawDepth: Int = 1) {
     }
     val paintMatrix = Matrix()
     var enabled = false
+        set(value) {
+            field = value
+            viewGroup.setWillNotDraw(!enabled)
+            viewGroup.postInvalidate()
+        }
     var animationFraction = 0f
     private var mEdgeColor = Color.WHITE
     private var mShimmerColor = Color.GRAY
@@ -66,14 +70,9 @@ open class SkeletonDelegate(val viewGroup: ViewGroup, val drawDepth: Int = 1) {
         mShimmerDuration = duration
     }
 
-    fun setEnable(v: Boolean) {
-        enabled = v
-        viewGroup.setWillNotDraw(!enabled)
-        viewGroup.postInvalidate()
-    }
 
     fun startAnimate() {
-        if (enabled) {
+        if (enabled && !animator.isStarted) {
             viewGroup.doOnPreDraw {
                 animator.addUpdateListener {
                     animationFraction = it.animatedFraction
@@ -91,13 +90,6 @@ open class SkeletonDelegate(val viewGroup: ViewGroup, val drawDepth: Int = 1) {
         animator.removeAllUpdateListeners()
     }
 
-    fun onInterceptTouchEvent(ev: MotionEvent): Boolean = false
-
-    fun onTouchEvent(event: MotionEvent): Boolean = false
-
-    fun dispatchDraw(canvas: Canvas): Boolean = enabled
-
-
     /**
      * by override this funciton you define your own shader pattern
      */
@@ -107,15 +99,15 @@ open class SkeletonDelegate(val viewGroup: ViewGroup, val drawDepth: Int = 1) {
         paintMatrix.reset()
         paintMatrix.postTranslate(fl, 0f)
         viewBorderPaint.shader = LinearGradient(
-            0f, 0f,
-            layoutWidth, 0f,
-            intArrayOf(
-                mEdgeColor, mShimmerColor, mEdgeColor
-            ),
-            floatArrayOf(
-                .25f, .5f, .65f
-            ),
-            Shader.TileMode.CLAMP
+                0f, 0f,
+                layoutWidth, 0f,
+                intArrayOf(
+                        mEdgeColor, mShimmerColor, mEdgeColor
+                ),
+                floatArrayOf(
+                        .25f, .5f, .65f
+                ),
+                Shader.TileMode.CLAMP
         ).apply {
             setLocalMatrix(paintMatrix)
         }
@@ -136,7 +128,7 @@ open class SkeletonDelegate(val viewGroup: ViewGroup, val drawDepth: Int = 1) {
         canvas.drawRect(viewBoundsRect, viewBorderPaint)
     }
 
-    fun onDraw(canvas: Canvas): Boolean {
+    fun onDraw(canvas: Canvas) {
         with(viewGroup) {
             getLocationInWindow(location)
             val offsetX = location[0].toFloat()
@@ -145,14 +137,14 @@ open class SkeletonDelegate(val viewGroup: ViewGroup, val drawDepth: Int = 1) {
                 throw AssertionError("View queue is not empty.")
             }
             layeredViewQueue.addAll(
-                children
-                    .filter { it.visibility == View.VISIBLE }
-                    .map { view ->
-                        layeredViewPool.acquire()
-                            .apply {
-                                set(view, 0)
+                    children
+                            .filter { it.visibility == View.VISIBLE }
+                            .map { view ->
+                                layeredViewPool.acquire()
+                                        .apply {
+                                            set(view, 0)
+                                        }
                             }
-                    }
             )
 
             updateShader()
@@ -176,19 +168,18 @@ open class SkeletonDelegate(val viewGroup: ViewGroup, val drawDepth: Int = 1) {
                     //queue children for later drawing.
                     if (this is ViewGroup && layer < drawDepth) {
                         layeredViewQueue.addAll(
-                            children
-                                .filter { it.visibility == View.VISIBLE }
-                                .map { view ->
-                                    layeredViewPool.acquire().apply {
-                                        set(view, layer + 1)
-                                    }
-                                }
+                                children
+                                        .filter { it.visibility == View.VISIBLE }
+                                        .map { view ->
+                                            layeredViewPool.acquire().apply {
+                                                set(view, layer + 1)
+                                            }
+                                        }
                         )
                     }
                 }
             }
         }
-        return enabled
 
     }
 }

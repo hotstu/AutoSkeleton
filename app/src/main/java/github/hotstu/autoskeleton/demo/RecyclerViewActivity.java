@@ -3,11 +3,14 @@ package github.hotstu.autoskeleton.demo;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import github.hotstu.autoskeleton.SkeletonFrameLayout;
 import github.hotstu.autoskeleton.demo.adapter.NewsAdapter;
 import github.hotstu.autoskeleton.demo.adapter.PersonAdapter;
 
@@ -42,6 +45,13 @@ public class RecyclerViewActivity extends AppCompatActivity {
 
 
     private void init() {
+        final SkeletonFrameLayout root = findViewById(R.id.rootView);
+        root.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                root.hideSkeleton();
+            }
+        }, 3000);
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
         if (TYPE_LINEAR.equals(mType)) {
             recyclerView.setLayoutManager(new LinearLayoutManager(this, VERTICAL, false));

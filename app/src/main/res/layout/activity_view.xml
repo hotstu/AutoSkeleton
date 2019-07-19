@@ -8,7 +8,8 @@
     android:scrollbars="none">
 
 
-    <LinearLayout
+    <github.hotstu.autoskeleton.SkeletonLinearLayout
+        android:id="@+id/skeleton"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -99,5 +100,5 @@
             android:layout_height="wrap_content" />
 
 
-    </LinearLayout>
+    </github.hotstu.autoskeleton.SkeletonLinearLayout>
 </androidx.core.widget.NestedScrollView>
