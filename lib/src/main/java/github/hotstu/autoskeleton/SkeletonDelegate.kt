@@ -21,7 +21,7 @@ import java.util.*
  */
 open class SkeletonDelegate(val viewGroup: ViewGroup, val drawDepth: Int = 1) {
     companion object {
-        const val DEFAULT_SHIMMER_DURATION = 2_500L
+        const val DEFAULT_SHIMMER_DURATION = 1_500L
     }
 
     val location = IntArray(2)
@@ -52,6 +52,7 @@ open class SkeletonDelegate(val viewGroup: ViewGroup, val drawDepth: Int = 1) {
     var animationFraction = 0f
     private var mEdgeColor = Color.WHITE
     private var mShimmerColor = Color.GRAY
+    private var mShimmerDuration = DEFAULT_SHIMMER_DURATION
 
     fun setEdgeColor(@ColorInt color: Int) {
         mEdgeColor = color
@@ -61,13 +62,15 @@ open class SkeletonDelegate(val viewGroup: ViewGroup, val drawDepth: Int = 1) {
         mShimmerColor = color
     }
 
+    fun setShimmerDuration(duration: Long) {
+        mShimmerDuration = duration
+    }
+
     fun setEnable(v: Boolean) {
         enabled = v
         viewGroup.setWillNotDraw(!enabled)
         viewGroup.postInvalidate()
-
     }
-
 
     fun startAnimate() {
         if (enabled) {
@@ -95,6 +98,9 @@ open class SkeletonDelegate(val viewGroup: ViewGroup, val drawDepth: Int = 1) {
     fun dispatchDraw(canvas: Canvas): Boolean = enabled
 
 
+    /**
+     * by override this funciton you define your own shader pattern
+     */
     open fun updateShader() {
         val layoutWidth = viewGroup.width.toFloat()
         val fl = (animationFraction - .5f) * layoutWidth * 1.5f
