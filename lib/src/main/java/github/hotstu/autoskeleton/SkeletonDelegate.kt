@@ -18,24 +18,20 @@ import java.util.*
  * @param viewGroup
  * @param drawDepth
  */
-open class SkeletonDelegate(private val viewGroup: ViewGroup, val drawDepth: Int) {
+open class SkeletonDelegate(val viewGroup: ViewGroup, val drawDepth: Int = 1) {
     companion object {
-        const val DEFAULT_LIGHT_WIDTH = 100
         const val DEFAULT_SHIMMER_ANGLE = 30
         const val DEFAULT_SHIMMER_DURATION = 2_500L
     }
 
-    private var enabled = false
-    private val location = IntArray(2)
-    private val viewBoundsRect = Rect()
-    private val layeredViewQueue = ArrayDeque<LayeredViewHolder>()
-
-
-    private val viewBorderPaint = Paint().apply {
+    val location = IntArray(2)
+    val viewBoundsRect = Rect()
+    val layeredViewQueue = ArrayDeque<LayeredViewHolder>()
+    val viewBorderPaint = Paint().apply {
         style = Paint.Style.FILL
     }
 
-    private val animator: ValueAnimator by lazy {
+    val animator: ValueAnimator by lazy {
         ValueAnimator.ofFloat(0f, 1f)
             .apply {
                 repeatCount = ValueAnimator.INFINITE
@@ -44,40 +40,30 @@ open class SkeletonDelegate(private val viewGroup: ViewGroup, val drawDepth: Int
             }
     }
 
-    private val layeredViewPool by lazy {
+    val layeredViewPool by lazy {
         ViewPool(10) {
             LayeredViewHolder()
         }
     }
+    val PaintMatrix = Matrix()
+    var enabled = false
+    var animationFraction = 0f
 
     fun setEnable(v: Boolean) {
         enabled = v
         viewGroup.setWillNotDraw(!enabled)
         viewGroup.postInvalidate()
-        viewGroup.doOnPreDraw {
-            val matrix = Matrix()
-            animator.addUpdateListener {
-                val layoutWidth = viewGroup.width.toFloat()
-                val fl = ((it.animatedValue as Float) - .5f) *2f * layoutWidth
-                matrix.setTranslate(fl, 0f)
-                viewBorderPaint.shader = LinearGradient(
-                    0f, 0f,
-                    layoutWidth, 0f,
-                    intArrayOf(
-                        Color.WHITE, Color.BLACK, Color.BLACK, Color.WHITE
-                    ),
-                    floatArrayOf(
-                        .45f, .49f, .51f, .55f
-                    ),
-                    Shader.TileMode.CLAMP
-                ).apply {
-                    setLocalMatrix(matrix)
-                }
+        if (enabled) {
+            viewGroup.doOnPreDraw {
 
-                viewGroup.postInvalidate()
+                animator.addUpdateListener {
+                    animationFraction = it.animatedFraction
+                    viewGroup.postInvalidate()
+                }
+                animator.start()
             }
-            animator.start()
         }
+
     }
 
     fun stopAnimate() {
@@ -90,6 +76,26 @@ open class SkeletonDelegate(private val viewGroup: ViewGroup, val drawDepth: Int
     fun onTouchEvent(event: MotionEvent): Boolean = false
 
     fun dispatchDraw(canvas: Canvas): Boolean = enabled
+
+
+    open fun updateShader() {
+        val layoutWidth = viewGroup.width.toFloat()
+        val fl = (animationFraction  - .5f)  * layoutWidth
+        PaintMatrix.setTranslate(fl, 0f)
+        viewBorderPaint.shader = LinearGradient(
+            0f, 0f,
+            layoutWidth, 0f,
+            intArrayOf(
+                Color.WHITE, Color.BLACK, Color.BLACK, Color.WHITE
+            ),
+            floatArrayOf(
+                .45f, .49f, .51f, .55f
+            ),
+            Shader.TileMode.CLAMP
+        ).apply {
+            setLocalMatrix(PaintMatrix)
+        }
+    }
 
     /**
      * by override this function you can filter which type of view will be drawn
@@ -106,7 +112,6 @@ open class SkeletonDelegate(private val viewGroup: ViewGroup, val drawDepth: Int
         canvas.drawRect(viewBoundsRect, viewBorderPaint)
     }
 
-    //TODO support shader drawing & animate by set the paint
     fun onDraw(canvas: Canvas): Boolean {
         with(viewGroup) {
             getLocationInWindow(location)
@@ -126,6 +131,7 @@ open class SkeletonDelegate(private val viewGroup: ViewGroup, val drawDepth: Int
                     }
             )
 
+            updateShader()
             while (!layeredViewQueue.isEmpty()) {
                 val layeredView = layeredViewQueue.removeFirst()
                 val view = layeredView.view
