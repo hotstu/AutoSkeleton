@@ -45,6 +45,13 @@
         android:layout_marginTop="10dp"
         android:text="custom drawing"
         android:textAllCaps="false" />
+    <Button
+        android:id="@+id/btn_kun"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="custom drawing2"
+        android:textAllCaps="false" />
 
 
 </LinearLayout>

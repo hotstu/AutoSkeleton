@@ -1,4 +1,4 @@
-package github.hotstu.autoskeleton.demo.custom
+package github.hotstu.autoskeleton.demo.easteregg
 
 import android.os.Bundle
 import android.view.View
@@ -10,14 +10,14 @@ import github.hotstu.autoskeleton.SkeletonLinearLayout
 import github.hotstu.autoskeleton.demo.R
 import github.hotstu.autoskeleton.demo.adapter.TopicAdapter
 
-class CustomFullViewActivity : AppCompatActivity() {
+class KunViewActivity : AppCompatActivity() {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_view)
         val s = findViewById<View>(R.id.skeleton) as SkeletonLinearLayout
-        s.setDelegate(CustomSkeletonDelegate(s, 3))
+        s.setDelegate(KunSkeletonDelegate(s, 0))
         s.showSkeleton()
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
         val adapter = TopicAdapter()

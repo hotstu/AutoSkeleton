@@ -16,7 +16,7 @@ class SkeletonFrameLayout : FrameLayout, AnimatedSkeleton<FrameLayout> {
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
-    private var delegate = SkeletonDelegate(this, 2)
+    private var delegate = SkeletonDelegate(this, 3)
 
     init {
         delegate.setEdgeColor(ContextCompat.getColor(context, R.color.autoskeleton_light_transparent))

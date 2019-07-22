@@ -11,7 +11,10 @@ import github.hotstu.autoskeleton.Skeleton
  * @desc
  */
 @BindingAdapter("bind:skeletonEnable")
-fun bindSkeletion(view: ViewGroup, enabled: Boolean) {
+fun bindSkeletion(view: ViewGroup, enabled: Boolean?) {
+    if (enabled == null) {
+        return
+    }
     view as Skeleton<*>
     if (enabled) {
         view.showSkeleton()

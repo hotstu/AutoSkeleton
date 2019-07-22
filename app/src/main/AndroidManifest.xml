@@ -20,6 +20,7 @@
         <activity android:name=".FullViewActivity"/>
         <activity android:name=".databinding.ExampleActivity" />
         <activity android:name=".custom.CustomFullViewActivity"/>
+        <activity android:name=".easteregg.KunViewActivity" />
     </application>
 
 </manifest>

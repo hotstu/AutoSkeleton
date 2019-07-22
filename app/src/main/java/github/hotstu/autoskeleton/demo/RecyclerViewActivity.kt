@@ -43,8 +43,6 @@ class RecyclerViewActivity : AppCompatActivity() {
     }
 
     companion object {
-
-
         private val PARAMS_TYPE = "params_type"
         val TYPE_LINEAR = "type_linear"
         val TYPE_GRID = "type_grid"

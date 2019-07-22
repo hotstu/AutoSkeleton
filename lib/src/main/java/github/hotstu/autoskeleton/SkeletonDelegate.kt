@@ -19,7 +19,7 @@ import java.util.*
  * @param viewGroup
  * @param drawDepth
  */
-open class SkeletonDelegate(val viewGroup: ViewGroup, val drawDepth: Int = 1) {
+open class SkeletonDelegate(val viewGroup: ViewGroup, val drawDepth: Int = 2) {
     companion object {
         const val DEFAULT_SHIMMER_DURATION = 1_500L
     }
@@ -35,11 +35,11 @@ open class SkeletonDelegate(val viewGroup: ViewGroup, val drawDepth: Int = 1) {
 
     private val _animator: ValueAnimator by lazy {
         ValueAnimator.ofFloat(0f, 1f)
-            .apply {
-                repeatCount = ValueAnimator.INFINITE
-                duration = DEFAULT_SHIMMER_DURATION
-                interpolator = AnticipateInterpolator()
-            }
+                .apply {
+                    repeatCount = ValueAnimator.INFINITE
+                    duration = DEFAULT_SHIMMER_DURATION
+                    interpolator = AnticipateInterpolator()
+                }
     }
 
     open val animator: ValueAnimator
@@ -109,15 +109,15 @@ open class SkeletonDelegate(val viewGroup: ViewGroup, val drawDepth: Int = 1) {
         paintMatrix.reset()
         paintMatrix.postTranslate(fl, 0f)
         viewBorderPaint.shader = LinearGradient(
-            0f, 0f,
-            layoutWidth, 0f,
-            intArrayOf(
-                mEdgeColor, mShimmerColor, mEdgeColor
-            ),
-            floatArrayOf(
-                .25f, .5f, .65f
-            ),
-            Shader.TileMode.CLAMP
+                0f, 0f,
+                layoutWidth, 0f,
+                intArrayOf(
+                        mEdgeColor, mShimmerColor, mEdgeColor
+                ),
+                floatArrayOf(
+                        .25f, .5f, .65f
+                ),
+                Shader.TileMode.CLAMP
         ).apply {
             setLocalMatrix(paintMatrix)
         }
@@ -149,15 +149,11 @@ open class SkeletonDelegate(val viewGroup: ViewGroup, val drawDepth: Int = 1) {
             if (!layeredViewQueue.isEmpty()) {
                 throw AssertionError("View queue is not empty.")
             }
-            layeredViewQueue.addAll(
-                children
-                    .filter { it.visibility == View.VISIBLE }
-                    .map { view ->
-                        layeredViewPool.acquire()
+            layeredViewQueue.add(
+                    layeredViewPool.acquire()
                             .apply {
-                                set(view, 0)
+                                set(viewGroup, 0)
                             }
-                    }
             )
 
             updateShader()
@@ -180,13 +176,13 @@ open class SkeletonDelegate(val viewGroup: ViewGroup, val drawDepth: Int = 1) {
                     //queue children for later drawing.
                     if (this is ViewGroup && layer < drawDepth) {
                         layeredViewQueue.addAll(
-                            children
-                                .filter { it.visibility == View.VISIBLE }
-                                .map { view ->
-                                    layeredViewPool.acquire().apply {
-                                        set(view, layer + 1)
-                                    }
-                                }
+                                children
+                                        .filter { it.visibility == View.VISIBLE }
+                                        .map { view ->
+                                            layeredViewPool.acquire().apply {
+                                                set(view, layer + 1)
+                                            }
+                                        }
                         )
                     }
                 }
