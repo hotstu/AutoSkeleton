@@ -10,7 +10,7 @@ import github.hotstu.autoskeleton.SkeletonDelegate
 /**
  * @author hglf [hglf](https://github.com/hotstu)
  * @since 7/22/19
- * @desc
+ * @desc draw circle instead of rect on specific view location
  */
 class CustomSkeletonDelegate(viewGroup: ViewGroup, drawDepth: Int) : SkeletonDelegate(viewGroup, drawDepth) {
 

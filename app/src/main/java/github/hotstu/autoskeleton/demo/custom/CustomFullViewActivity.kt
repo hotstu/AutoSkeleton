@@ -1,7 +1,5 @@
 package github.hotstu.autoskeleton.demo.custom
 
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -28,13 +26,5 @@ class CustomFullViewActivity : AppCompatActivity() {
         recyclerView.post { recyclerView.adapter = adapter }
        // recyclerView.postDelayed({ s.hideSkeleton() }, 3000)
     }
-
-    companion object {
-        fun start(context: Context, type: String) {
-            val intent = Intent(context, CustomFullViewActivity::class.java)
-            context.startActivity(intent)
-        }
-    }
-
 
 }
