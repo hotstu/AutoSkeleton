@@ -39,6 +39,11 @@ public class SkeletonLinearLayout extends LinearLayout implements AnimatedSkelet
         delegate.setEnabled(true);
     }
 
+    public void setDelegate(SkeletonDelegate delegate) {
+        hideSkeleton();
+        this.delegate = delegate;
+    }
+
     @Override
     public void hideSkeleton() {
         delegate.stopAnimate();

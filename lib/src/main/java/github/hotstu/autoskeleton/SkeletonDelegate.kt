@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnticipateInterpolator
 import androidx.annotation.ColorInt
+import androidx.core.content.ContextCompat
 import androidx.core.util.Pools
 import androidx.core.view.children
 import androidx.core.view.doOnPreDraw
@@ -32,14 +33,17 @@ open class SkeletonDelegate(val viewGroup: ViewGroup, val drawDepth: Int = 1) {
         isAntiAlias = true
     }
 
-    val animator: ValueAnimator by lazy {
+    private val _animator: ValueAnimator by lazy {
         ValueAnimator.ofFloat(0f, 1f)
-                .apply {
-                    repeatCount = ValueAnimator.INFINITE
-                    duration = DEFAULT_SHIMMER_DURATION
-                    interpolator = AnticipateInterpolator()
-                }
+            .apply {
+                repeatCount = ValueAnimator.INFINITE
+                duration = DEFAULT_SHIMMER_DURATION
+                interpolator = AnticipateInterpolator()
+            }
     }
+
+    open val animator: ValueAnimator
+        get() = _animator
 
     val layeredViewPool by lazy {
         ViewPool(10) {
@@ -57,6 +61,11 @@ open class SkeletonDelegate(val viewGroup: ViewGroup, val drawDepth: Int = 1) {
     private var mEdgeColor = Color.WHITE
     private var mShimmerColor = Color.GRAY
     private var mShimmerDuration = DEFAULT_SHIMMER_DURATION
+
+    init {
+        mEdgeColor = ContextCompat.getColor(viewGroup.context, R.color.autoskeleton_light_transparent)
+        mShimmerColor = ContextCompat.getColor(viewGroup.context, R.color.autoskeleton_dark_transparent)
+    }
 
     fun setEdgeColor(@ColorInt color: Int) {
         mEdgeColor = color
@@ -91,7 +100,6 @@ open class SkeletonDelegate(val viewGroup: ViewGroup, val drawDepth: Int = 1) {
     }
 
 
-
     /**
      * by override this funciton you define your own shader pattern
      */
@@ -101,15 +109,15 @@ open class SkeletonDelegate(val viewGroup: ViewGroup, val drawDepth: Int = 1) {
         paintMatrix.reset()
         paintMatrix.postTranslate(fl, 0f)
         viewBorderPaint.shader = LinearGradient(
-                0f, 0f,
-                layoutWidth, 0f,
-                intArrayOf(
-                        mEdgeColor, mShimmerColor, mEdgeColor
-                ),
-                floatArrayOf(
-                        .25f, .5f, .65f
-                ),
-                Shader.TileMode.CLAMP
+            0f, 0f,
+            layoutWidth, 0f,
+            intArrayOf(
+                mEdgeColor, mShimmerColor, mEdgeColor
+            ),
+            floatArrayOf(
+                .25f, .5f, .65f
+            ),
+            Shader.TileMode.CLAMP
         ).apply {
             setLocalMatrix(paintMatrix)
         }
@@ -118,16 +126,19 @@ open class SkeletonDelegate(val viewGroup: ViewGroup, val drawDepth: Int = 1) {
     /**
      * by override this function you can filter which type of view will be drawn
      */
-    open fun View.shouldDrawFake() = this !is ViewGroup
+    open fun LayeredViewHolder.shouldDrawFake() = this.view !is ViewGroup
 
     /**
      * by override this function you can make your own drawing
      */
-    open fun View.drawFake(canvas: Canvas, offsetX: Float, offsetY: Float) {
-        getLocationInWindow(location)
-        viewBoundsRect.set(0, 0, width, height)
-        viewBoundsRect.offset(location[0] - offsetX.toInt(), location[1] - offsetY.toInt())
-        canvas.drawRect(viewBoundsRect, viewBorderPaint)
+    open fun LayeredViewHolder.drawFake(canvas: Canvas, offsetX: Float, offsetY: Float) {
+        with(this.view!!) {
+            getLocationInWindow(location)
+            viewBoundsRect.set(0, 0, width, height)
+            viewBoundsRect.offset(location[0] - offsetX.toInt(), location[1] - offsetY.toInt())
+            canvas.drawRect(viewBoundsRect, viewBorderPaint)
+        }
+
     }
 
     open fun onDraw(canvas: Canvas) {
@@ -139,14 +150,14 @@ open class SkeletonDelegate(val viewGroup: ViewGroup, val drawDepth: Int = 1) {
                 throw AssertionError("View queue is not empty.")
             }
             layeredViewQueue.addAll(
-                    children
-                            .filter { it.visibility == View.VISIBLE }
-                            .map { view ->
-                                layeredViewPool.acquire()
-                                        .apply {
-                                            set(view, 0)
-                                        }
+                children
+                    .filter { it.visibility == View.VISIBLE }
+                    .map { view ->
+                        layeredViewPool.acquire()
+                            .apply {
+                                set(view, 0)
                             }
+                    }
             )
 
             updateShader()
@@ -158,25 +169,24 @@ open class SkeletonDelegate(val viewGroup: ViewGroup, val drawDepth: Int = 1) {
                     layeredViewQueue.clear()
                     break
                 }
+
+                if (layeredView.shouldDrawFake()) {
+                    layeredView.drawFake(canvas, offsetX, offsetY)
+                }
                 // Restore the object to the pool for use later.
                 layeredView.clear()
                 layeredViewPool.release(layeredView)
-
                 with(view!!) {
-                    if (shouldDrawFake()) {
-                        drawFake(canvas, offsetX, offsetY)
-                    }
-
                     //queue children for later drawing.
                     if (this is ViewGroup && layer < drawDepth) {
                         layeredViewQueue.addAll(
-                                children
-                                        .filter { it.visibility == View.VISIBLE }
-                                        .map { view ->
-                                            layeredViewPool.acquire().apply {
-                                                set(view, layer + 1)
-                                            }
-                                        }
+                            children
+                                .filter { it.visibility == View.VISIBLE }
+                                .map { view ->
+                                    layeredViewPool.acquire().apply {
+                                        set(view, layer + 1)
+                                    }
+                                }
                         )
                     }
                 }

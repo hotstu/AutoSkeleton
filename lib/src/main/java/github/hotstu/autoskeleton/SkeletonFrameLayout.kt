@@ -16,12 +16,17 @@ class SkeletonFrameLayout : FrameLayout, AnimatedSkeleton<FrameLayout> {
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
-    private val delegate = SkeletonDelegate(this, 2)
+    private var delegate = SkeletonDelegate(this, 2)
 
     init {
         delegate.setEdgeColor(ContextCompat.getColor(context, R.color.autoskeleton_light_transparent))
         delegate.setShimmerColor(ContextCompat.getColor(context, R.color.autoskeleton_dark_transparent))
         delegate.enabled = true
+    }
+
+    fun setSkeletonDelegate(delegate: SkeletonDelegate) {
+        hideSkeleton()
+        this.delegate = delegate
     }
 
     override fun hideSkeleton() {

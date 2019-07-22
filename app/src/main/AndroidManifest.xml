@@ -19,6 +19,7 @@
         <activity android:name=".RecyclerViewActivity"/>
         <activity android:name=".FullViewActivity"/>
         <activity android:name=".databinding.ExampleActivity" />
+        <activity android:name=".custom.CustomFullViewActivity"/>
     </application>
 
 </manifest>
