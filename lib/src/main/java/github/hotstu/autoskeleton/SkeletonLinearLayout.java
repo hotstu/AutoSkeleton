@@ -3,7 +3,6 @@ package github.hotstu.autoskeleton;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
-import android.view.MotionEvent;
 import android.widget.LinearLayout;
 
 import androidx.core.content.ContextCompat;
@@ -52,16 +51,6 @@ public class SkeletonLinearLayout extends LinearLayout implements AnimatedSkelet
         delegate.startAnimate();
     }
 
-    @Override
-    public boolean onInterceptTouchEvent(MotionEvent ev) {
-        return delegate.onInterceptTouchEvent(ev) || super.onInterceptTouchEvent(ev);
-    }
-
-
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        return delegate.onTouchEvent(event) || super.onTouchEvent(event);
-    }
 
     @Override
     public void dispatchDraw(Canvas canvas) {

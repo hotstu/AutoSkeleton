@@ -9,7 +9,7 @@ import github.hotstu.autoskeleton.demo.R
 
 
 
-class NewsAdapter : RecyclerView.Adapter<SimpleRcvViewHolder>() {
+open class NewsAdapter : RecyclerView.Adapter<SimpleRcvViewHolder>() {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SimpleRcvViewHolder {

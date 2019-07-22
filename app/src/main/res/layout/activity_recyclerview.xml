@@ -1,12 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<github.hotstu.autoskeleton.SkeletonFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/rootView"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@android:color/white">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/apk/res-auto">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
+    <data>
+
+        <variable
+            name="viewModel"
+            type="github.hotstu.autoskeleton.demo.databinding.ExampleViewModel" />
+
+    </data>
+
+    <github.hotstu.autoskeleton.SkeletonFrameLayout
+        android:id="@+id/rootView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-</github.hotstu.autoskeleton.SkeletonFrameLayout>
+        android:layout_height="match_parent"
+        android:background="@android:color/white"
+        bind:skeletonEnable="@{!viewModel.dataReady}">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            bind:data="@{viewModel.data}" />
+    </github.hotstu.autoskeleton.SkeletonFrameLayout>
+</layout>

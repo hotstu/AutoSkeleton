@@ -2,7 +2,6 @@ package github.hotstu.autoskeleton
 
 import android.animation.ValueAnimator
 import android.graphics.*
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnticipateInterpolator
@@ -91,9 +90,6 @@ open class SkeletonDelegate(val viewGroup: ViewGroup, val drawDepth: Int = 1) {
         animator.removeAllUpdateListeners()
     }
 
-    fun onInterceptTouchEvent(ev: MotionEvent): Boolean = enabled
-
-    fun onTouchEvent(event: MotionEvent): Boolean = enabled
 
 
     /**
