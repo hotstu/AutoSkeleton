@@ -1,30 +1,29 @@
 package github.hotstu.autoskeleton.demo.easteregg
 
 import android.os.Bundle
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.VERTICAL
-import github.hotstu.autoskeleton.SkeletonLinearLayout
+import github.hotstu.autoskeleton.SkeletonFrameLayout
 import github.hotstu.autoskeleton.demo.R
-import github.hotstu.autoskeleton.demo.adapter.TopicAdapter
+import github.hotstu.autoskeleton.demo.adapter.NewsAdapter
 
 class KunViewActivity : AppCompatActivity() {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_view)
-        val s = findViewById<View>(R.id.skeleton) as SkeletonLinearLayout
-        s.setDelegate(KunSkeletonDelegate(s, 0))
-        s.showSkeleton()
+        setContentView(R.layout.activity_recyclerview)
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
-        val adapter = TopicAdapter()
-        val linearLayoutManager = LinearLayoutManager(this, VERTICAL, false)
-        recyclerView.layoutManager = linearLayoutManager
-        recyclerView.post { recyclerView.adapter = adapter }
-       // recyclerView.postDelayed({ s.hideSkeleton() }, 3000)
+            recyclerView.layoutManager = LinearLayoutManager(this, VERTICAL, false)
+            val adapter = NewsAdapter()
+            recyclerView.adapter = adapter
+
+        val root = findViewById<SkeletonFrameLayout>(R.id.rootView)
+        root.setSkeletonDelegate(KunSkeletonDelegate(root, 2))
+        root.showSkeleton()
+       recyclerView.postDelayed({ root.hideSkeleton() }, 3000)
     }
 
 }
