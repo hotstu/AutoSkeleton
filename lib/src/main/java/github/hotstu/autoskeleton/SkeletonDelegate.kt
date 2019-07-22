@@ -2,6 +2,7 @@ package github.hotstu.autoskeleton
 
 import android.animation.ValueAnimator
 import android.graphics.*
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnticipateInterpolator
@@ -90,6 +91,11 @@ open class SkeletonDelegate(val viewGroup: ViewGroup, val drawDepth: Int = 1) {
         animator.removeAllUpdateListeners()
     }
 
+    fun onInterceptTouchEvent(ev: MotionEvent): Boolean = enabled
+
+    fun onTouchEvent(event: MotionEvent): Boolean = enabled
+
+
     /**
      * by override this funciton you define your own shader pattern
      */
@@ -128,7 +134,7 @@ open class SkeletonDelegate(val viewGroup: ViewGroup, val drawDepth: Int = 1) {
         canvas.drawRect(viewBoundsRect, viewBorderPaint)
     }
 
-    fun onDraw(canvas: Canvas) {
+    open fun onDraw(canvas: Canvas) {
         with(viewGroup) {
             getLocationInWindow(location)
             val offsetX = location[0].toFloat()

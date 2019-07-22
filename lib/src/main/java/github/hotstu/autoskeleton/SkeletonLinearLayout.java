@@ -3,12 +3,14 @@ package github.hotstu.autoskeleton;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.widget.LinearLayout;
 
 import androidx.core.content.ContextCompat;
 
 /**
  * this view demonstrate how to implement you own ViewGroup by simply override #dispatchDraw and #onDraw
+ *
  * @author hglf [hglf](https://github.com/hotstu)
  * @desc
  * @since 7/19/19
@@ -48,6 +50,17 @@ public class SkeletonLinearLayout extends LinearLayout implements AnimatedSkelet
     public void showSkeleton() {
         delegate.setEnabled(true);
         delegate.startAnimate();
+    }
+
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent ev) {
+        return delegate.onInterceptTouchEvent(ev) || super.onInterceptTouchEvent(ev);
+    }
+
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        return delegate.onTouchEvent(event) || super.onTouchEvent(event);
     }
 
     @Override

@@ -3,6 +3,7 @@ package github.hotstu.autoskeleton
 import android.content.Context
 import android.graphics.Canvas
 import android.util.AttributeSet
+import android.view.MotionEvent
 import android.widget.FrameLayout
 import androidx.core.content.ContextCompat
 
@@ -32,6 +33,19 @@ class SkeletonFrameLayout : FrameLayout, AnimatedSkeleton<FrameLayout> {
     override fun showSkeleton() {
         delegate.enabled = true
         delegate.startAnimate()
+    }
+
+
+    //override this if you want prevent click on children view when skeleton is showing
+    //if you do not care you dont need this
+    override fun onInterceptTouchEvent(ev: MotionEvent): Boolean {
+        return delegate.onInterceptTouchEvent(ev)||super.onInterceptTouchEvent(ev)
+    }
+
+    //override this if you want prevent click on children view when skeleton is showing
+    //if you do not care you dont need this
+    override fun onTouchEvent(event: MotionEvent): Boolean {
+        return delegate.onTouchEvent(event)|| super.onTouchEvent(event)
     }
 
 
