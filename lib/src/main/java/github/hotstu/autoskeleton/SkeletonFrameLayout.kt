@@ -22,6 +22,7 @@ class SkeletonFrameLayout : FrameLayout, AnimatedSkeleton<FrameLayout> {
         delegate.setEdgeColor(ContextCompat.getColor(context, R.color.autoskeleton_light_transparent))
         delegate.setShimmerColor(ContextCompat.getColor(context, R.color.autoskeleton_dark_transparent))
         delegate.enabled = true
+
     }
 
     fun setSkeletonDelegate(delegate: SkeletonDelegate) {

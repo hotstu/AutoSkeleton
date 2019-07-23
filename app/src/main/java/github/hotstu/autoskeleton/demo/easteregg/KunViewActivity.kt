@@ -23,7 +23,7 @@ class KunViewActivity : AppCompatActivity() {
         val root = findViewById<SkeletonFrameLayout>(R.id.rootView)
         root.setSkeletonDelegate(KunSkeletonDelegate(root, 2))
         root.showSkeleton()
-       recyclerView.postDelayed({ root.hideSkeleton() }, 3000)
+        recyclerView.postDelayed({ root.hideSkeleton() }, 5000)
     }
 
 }

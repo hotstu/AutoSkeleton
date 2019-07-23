@@ -42,6 +42,9 @@ open class SkeletonDelegate(val viewGroup: ViewGroup, val drawDepth: Int = 2) {
                 }
     }
 
+    /**
+     * override this if you want change the animation pattern
+     */
     open val animator: ValueAnimator
         get() = _animator
 
@@ -101,7 +104,7 @@ open class SkeletonDelegate(val viewGroup: ViewGroup, val drawDepth: Int = 2) {
 
 
     /**
-     * by override this funciton you define your own shader pattern
+     * by override this function you define your own [Shader] pattern on the [viewBorderPaint]
      */
     open fun updateShader() {
         val layoutWidth = viewGroup.width.toFloat()
@@ -157,6 +160,7 @@ open class SkeletonDelegate(val viewGroup: ViewGroup, val drawDepth: Int = 2) {
             )
 
             updateShader()
+            //Breadth-First Search start from the rootGroup as depth 0
             while (!layeredViewQueue.isEmpty()) {
                 val layeredView = layeredViewQueue.removeFirst()
                 val view = layeredView.view
