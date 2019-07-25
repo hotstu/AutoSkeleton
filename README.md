@@ -28,14 +28,15 @@ Yet Another skeleton loading library provides an easy way to show skeleton loadi
 
 * Better performance
 
-Unlike [ShimmerLayout][1] which traversal the view tree  and draw all the child on a bitmap twice, AutoSkeleton does not call `super.dispatchDraw(canvas)`; 
+  Unlike [ShimmerLayout][1] which traversal the view tree  and draw all the child on a bitmap twice, AutoSkeleton does not call `super.dispatchDraw(canvas)`.
 
 * custom drawing
 
-AutoSkeleton is designed as a loose developers have the full control of the drawing steps such as
-  * control the traversal view tree depth
-  * Exclude some views by view depth & view properties
-  * custom animation
+  AutoSkeleton is designed as a loose developers have the full control of the drawing steps such as
+  
+    * control the traversal view tree depth
+    * Exclude some views by view depth & view properties
+    * custom animation
   
 * Kotlin 
 
