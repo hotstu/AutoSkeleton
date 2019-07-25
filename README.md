@@ -6,6 +6,9 @@
 AutoSkeleton
 ===============
 Yet Another skeleton loading library provides an easy way to show skeleton loading like Facebook or Alipay aiming performance and extensibility
+
+![demo1][demo1] ![demo1][demo2]
+
 [中文](/README_CN.md)
 
 ### How to include
@@ -55,3 +58,6 @@ This library is inspired by [JakeWharton/scalpel](https://github.com/JakeWharton
 
 [1]: https://github.com/team-supercharge/ShimmerLayout
 [2]: https://github.com/ethanhua/Skeleton
+[demo1]: /screenshots/demo1.gif
+[demo2]: /screenshots/demo2.gif
+[demo]: /screenshots/demo.gif

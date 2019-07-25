@@ -19,7 +19,10 @@ class ExampleViewModel : ViewModel() {
 
     val data: LiveData<List<DemoItem>> =
         Observable.create<List<DemoItem>> { emitter ->
-            Thread.sleep(3000)
+            try {
+                Thread.sleep(3000)
+            } catch (e: Exception) {
+            }
             emitter.onNext(
                 listOf(
                     DemoItem(),
