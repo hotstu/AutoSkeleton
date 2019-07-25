@@ -12,9 +12,10 @@ Yet Another skeleton loading library provides an easy way to show skeleton loadi
 ![demo1][demo1] ![demo1][demo2]
 
 
-### How to include
+### How to include 
  ```groovy
 
+    //check out the latest version at the download badge on the top
     implementation 'github.hotstu.autoskeleton:autoskeleton:1.0.0'
 
  ```
