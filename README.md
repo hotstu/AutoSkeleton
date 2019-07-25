@@ -8,46 +8,48 @@ AutoSkeleton
 Yet Another skeleton loading library provides an easy way to show skeleton loading like Facebook or Alipay aiming performance and extensibility
 [中文](/README_CN.md)
 
-### use
+### How to include
  ```groovy
 
     implementation 'github.hotstu.autoskeleton:autoskeleton:1.0.0'
 
  ```
-### features
+### Features
 
-* preview in android studio 
-
-  you can see the preview  in layout editor directly in android studio
-
-* extensibility
+* Extensibility
 
   AutoSkeleton is code in the 'Delegate pattern' that means it's not limited to a specific type of ViewGroup
   
   you can simply extend any ViewGroup to implement the skeleton loading ability by delegate some method to the `SkeletonDelegate` class
 
-* kotlin 
+* Better performance
 
-  written in pure kotlin except some java code to show interoperability with java
-
-* better performance
-
-unlike [ShimmerLayout][1] which traversal the view tree  and draw all the child on a bitmap twice, AutoSkeleton does not call `super.dispatchDraw(canvas)`; 
-when enabled
+Unlike [ShimmerLayout][1] which traversal the view tree  and draw all the child on a bitmap twice, AutoSkeleton does not call `super.dispatchDraw(canvas)`; 
 
 * custom drawing
+
 AutoSkeleton is designed as a loose developers have the full control of the drawing steps such as
   * control the traversal view tree depth
   * Exclude some views by view depth & view properties
   * custom animation
+  
+* Kotlin 
+
+  AutoSkeleton is written in pure kotlin except some java code to show interoperability with java
+  
+* Preview in android studio 
+
+  You can see the preview  in layout editor directly in android studio
  
-### similar Libraries
-[ShimmerLayout][1]
-[Skeleton][2]
+### Similar Libraries
 
-### THANKS
+* [ShimmerLayout][1]
 
-this library is inspired by [JakeWharton/scalpel](https://github.com/JakeWharton/scalpel)
+* [Skeleton][2]
+
+### Thanks
+
+This library is inspired by [JakeWharton/scalpel](https://github.com/JakeWharton/scalpel)
 
 
 
