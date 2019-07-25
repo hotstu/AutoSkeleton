@@ -6,7 +6,7 @@
 AutoSkeleton
 ===============
 
-类似Facebook和Alipay的骨架加载loading动画库
+类似Facebook和Alipay的骨架加载loading动画库, 自动识别“骨骼”，自动绘制
 
 ![demo1][demo1] ![demo1][demo2]
 

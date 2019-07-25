@@ -5,7 +5,7 @@
 
 AutoSkeleton
 ===============
-Yet Another skeleton loading library provides an easy way to show skeleton loading like Facebook or Alipay aiming performance and extensibility
+Yet Another skeleton loading library provides an easy way to show skeleton loading like Facebook or Alipay **Automatically** aiming performance and extensibility
 
 [中文](/README_CN.md)
 
