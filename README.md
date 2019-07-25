@@ -7,9 +7,10 @@ AutoSkeleton
 ===============
 Yet Another skeleton loading library provides an easy way to show skeleton loading like Facebook or Alipay aiming performance and extensibility
 
+[中文](/README_CN.md)
+
 ![demo1][demo1] ![demo1][demo2]
 
-[中文](/README_CN.md)
 
 ### How to include
  ```groovy

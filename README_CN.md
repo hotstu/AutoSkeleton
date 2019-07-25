@@ -5,8 +5,11 @@
 
 AutoSkeleton
 ===============
+
 类似Facebook和Alipay的骨架加载loading动画库
+
 ![demo1][demo1] ![demo1][demo2]
+
 ### 使用
 
  ```groovy
