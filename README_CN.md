@@ -1,7 +1,22 @@
+[![author](https://img.shields.io/badge/author-hglf-blue.svg)](https://github.com/hotstu)
+[![Download](https://api.bintray.com/packages/hglf/maven/AutoSkeleton/images/download.svg) ](https://bintray.com/hglf/maven/AutoSkeleton/_latestVersion)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+
+
 AutoSkeleton
 ===============
-Yet Another library provides an easy way to show skeleton loading  like Facebook or Alipay with many Advantage than others
+类似Facebook和Alipay的骨架加载loading动画库
 
+### 使用
+
+ ```groovy
+
+    implementation 'github.hotstu.autoskeleton:autoskeleton:1.0.0'
+
+ ```
+ 
+ ### 特色
+ 
 * 可预览 
 在layout editor中可以直接看到效果
 
@@ -13,14 +28,20 @@ Yet Another library provides an easy way to show skeleton loading  like Facebook
 * 代码简洁易懂
 
 * 高性能 
-使用shader绘制，不像[shimmerlayout](https://github.com/team-supercharge/ShimmerLayout)操作bitmap， 同时省去了遍历view tree 的draw过程)
+与[ShimmerLayout][1]遍历view tree 将调用所有子view的draw方法到一个bitmap上的方案不同,AutoSkeleton不调用
+`super.dispatchDraw(canvas)`，性能大幅提升
 
-* 支持自定义纹理
-* 支持控制绘制的层级
-* 支持过滤哪些view被绘制
-* 支持动画
+* 可定制
+  * 自由设置遍历的层级,排除无意义的布局
+  * 可以根据层级和view属性筛选过滤哪些view需要绘制
+  * 支持自定义纹理
+  * 对单个子view自定义绘制过程
+  * 支持动画设置Animator
+
 * 过渡自然
-其他[替换view，替换reyclerView adapter的方案](https://github.com/ethanhua/Skeleton), 会出现画面抖动，或者出现与骨骼与真实view不一致的情况, 这里的过渡如丝般顺滑
+不像[Skeleton][2]采用的替换view的方案, 会出现画面抖动，或者出现与骨骼与真实view不一致的情况,
+ 这里的过渡如丝般顺滑
 
-TODO
-自定义动画效果
+[1]: https://github.com/team-supercharge/ShimmerLayout
+[2]: https://github.com/ethanhua/Skeleton
+

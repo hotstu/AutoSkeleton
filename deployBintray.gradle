@@ -1,0 +1,93 @@
+//config ~/.gradle/gradle.properties add your bintray_user & bintray_key first
+//打包 上传需在命令行执行 gradlew bintrayUpload, 点击任务执行会报错
+if (!project.hasProperty('bintray_user')) {
+    println "ignore bintray upload"
+    return
+}
+apply plugin: 'com.github.dcendents.android-maven'
+apply plugin: 'com.jfrog.bintray'
+Properties properties = new Properties()
+File projectPropertiesFile = rootProject.file('project.properties')
+properties.load(projectPropertiesFile.newDataInputStream())
+
+
+install {
+    repositories.mavenInstaller {
+        // This generates POM.xml with proper parameters
+        pom {
+            project {
+                packaging properties.getProperty("project.packaging")
+                // Add your description here
+                name properties.getProperty("project.name")
+                url properties.getProperty("project.siteUrl")
+                licenses {
+                    license {
+                        name properties.getProperty("license.name")
+                        url properties.getProperty("license.url")
+                    }
+                }
+                developers {
+                    developer {
+                        id properties.getProperty("developer.id")
+                        name properties.getProperty("developer.name")
+                        email properties.getProperty("developer.email")
+                    }
+                }
+                scm {
+                    connection properties.getProperty("project.gitUrl")
+                    developerConnection properties.getProperty("project.gitUrl")
+                    url properties.getProperty("project.siteUrl")
+                }
+            }
+        }
+    }
+}
+/*--------------------------------*/
+if (project.hasProperty("android")) {
+    task sourcesJar(type: Jar) {
+        classifier = 'sources'
+        from android.sourceSets.main.java.srcDirs
+    }
+
+    task javadoc(type: Javadoc) {
+        source = android.sourceSets.main.java.srcDirs
+        classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+    }
+} else { // Java libraries
+    task sourcesJar(type: Jar, dependsOn: classes) {
+        classifier = 'sources'
+        from sourceSets.main.allSource
+    }
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives javadocJar
+    archives sourcesJar
+}
+bintray {
+    user = "${bintray_user}"
+    key = "${bintray_key}"
+    configurations = ['archives']
+    pkg {
+        repo = properties.getProperty("project.repo")
+        name = properties.getProperty("project.name")
+        websiteUrl = properties.getProperty("project.siteUrl")
+        vcsUrl = properties.getProperty("project.gitUrl")
+        licenses = ["Apache-2.0"]
+        //publish = true
+    }
+}
+javadoc { //javadoc 采用 utf-8 编码否则会报“GBK的不可映射字符”错误
+    options {
+        failOnError false
+        encoding "UTF-8"
+        charSet "UTF-8"
+        addStringOption('Xdoclint:none', '-quiet')
+
+    }
+}

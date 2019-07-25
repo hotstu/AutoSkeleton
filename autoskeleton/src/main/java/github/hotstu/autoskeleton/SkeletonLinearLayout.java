@@ -5,8 +5,6 @@ import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.widget.LinearLayout;
 
-import androidx.core.content.ContextCompat;
-
 /**
  * this view demonstrate how to implement you own ViewGroup by simply override #dispatchDraw and #onDraw
  *
@@ -34,8 +32,6 @@ public class SkeletonLinearLayout extends LinearLayout implements AnimatedSkelet
 
     private void init() {
         delegate = new SkeletonDelegate(this, 3);
-        delegate.setEdgeColor(ContextCompat.getColor(getContext(), R.color.autoskeleton_light_transparent));
-        delegate.setShimmerColor(ContextCompat.getColor(getContext(), R.color.autoskeleton_dark_transparent));
         delegate.setEnabled(true);
     }
 

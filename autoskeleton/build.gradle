@@ -11,8 +11,6 @@ android {
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
-
-
     }
 
     buildTypes {
@@ -31,3 +29,6 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.0.2'
     testImplementation 'junit:junit:4.12'
 }
+
+apply from: "../deployBintray.gradle"
+

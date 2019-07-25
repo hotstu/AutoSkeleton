@@ -3,6 +3,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
+
 apply plugin: 'kotlin-kapt'
 
 android {
@@ -46,5 +47,5 @@ dependencies {
     kapt 'com.android.databinding:compiler:3.4.0'
 
     testImplementation 'junit:junit:4.12'
-    implementation project(path: ':lib')
+    implementation project(path: ':autoskeleton')
 }

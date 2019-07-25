@@ -1,1 +1,2 @@
-include ':app', ':lib'
+rootProject.name="ProjectAutoSkeleton"
+include ':app', ':autoskeleton'

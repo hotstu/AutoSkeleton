@@ -4,7 +4,6 @@ import android.content.Context
 import android.graphics.Canvas
 import android.util.AttributeSet
 import android.widget.FrameLayout
-import androidx.core.content.ContextCompat
 
 /**
  * @author hglf [hglf](https://github.com/hotstu)
@@ -19,8 +18,6 @@ class SkeletonFrameLayout : FrameLayout, AnimatedSkeleton<FrameLayout> {
     private var delegate = SkeletonDelegate(this, 3)
 
     init {
-        delegate.setEdgeColor(ContextCompat.getColor(context, R.color.autoskeleton_light_transparent))
-        delegate.setShimmerColor(ContextCompat.getColor(context, R.color.autoskeleton_dark_transparent))
         delegate.enabled = true
 
     }
