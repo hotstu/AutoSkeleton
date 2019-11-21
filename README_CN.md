@@ -45,11 +45,15 @@ AutoSkeleton
   
 * 过渡自然
 不像[Skeleton][2]采用的替换view的方案, 会出现画面抖动，或者出现与骨骼与真实view不一致的情况,
- 这里的过渡如丝般顺滑
+ 这里的过渡如丝般顺滑，骨骼和真实数据的布局一样
 
 [1]: https://github.com/team-supercharge/ShimmerLayout
 [2]: https://github.com/ethanhua/Skeleton
 [demo1]: /screenshots/demo1.gif
 [demo2]: /screenshots/demo2.gif
 [demo]: /screenshots/demo.gif
+
+
+* TODO
+结合google paging 实现首次加载前显示骨骼动画的demo
 
